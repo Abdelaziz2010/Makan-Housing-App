@@ -20,16 +20,17 @@ export class HousingService
     return this.getAllProperties().pipe(
       map(propertiesArray =>
       {
+        // throw new Error('Some error');
         return propertiesArray.find(p => p.Id === id);
       }));
   }
 
-  getAllProperties(SellRent?: number): Observable<Ipropertybase[]>
+  getAllProperties(SellRent?: number): Observable<Property[]>
   {
     return this.http.get('data/properties.json').pipe(
       map(data =>
       {
-        const propertiesArray: Array<Ipropertybase> = [];
+        const propertiesArray: Array<Property> = [];
         const localProperties = JSON.parse(localStorage.getItem('newProp')!);
         if(localProperties)
         {
@@ -68,7 +69,7 @@ export class HousingService
         return propertiesArray;
       })
     );
-    return this.http.get<Iproperty[]>('data/properties.json');
+    return this.http.get<Property[]>('data/properties.json');
   }
 
   addProperty(property: Property)
@@ -97,44 +98,3 @@ export class HousingService
     }
   }
 }
-
-// getAllProperties(SellRent: number): Observable<Ipropertybase[]>
-// {
-//   return this.http.get('data/properties.json').pipe(
-//     map(data =>
-//     {
-//       const propertiesArray: Array<Ipropertybase> = [];
-
-//       const localProperties = JSON.parse(localStorage.getItem('newProp') || '{}');
-
-//       if(localProperties)
-//       {
-//         for (const id in localProperties)
-//         {
-//           if (localProperties.hasOwnProperty(id) && localProperties[id].SellRent === SellRent)
-//           {
-//             propertiesArray.push(localProperties[id]);
-//           }
-//         }
-//       }
-
-//       const dataWithIndexSignature = data as { [key: string]: any} ;
-
-//       for (const id in dataWithIndexSignature)
-//       {
-//         if (dataWithIndexSignature.hasOwnProperty(id) && dataWithIndexSignature[id].SellRent === SellRent)
-//         {
-//           propertiesArray.push(dataWithIndexSignature[id]);
-//         }
-//       }
-//       return propertiesArray;
-//     })
-//   );
-//   return this.http.get<Iproperty[]>('data/properties.json');
-// }
-
-
-// addProperty(property: Property)
-// {
-//   localStorage.setItem('newProp', JSON.stringify(property));
-// }
