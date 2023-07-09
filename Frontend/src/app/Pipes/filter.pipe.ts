@@ -10,20 +10,21 @@ export class FilterPipe implements PipeTransform
   {
 
     const resultArray = [];
-
-    if (value.length === 0 || filterString === '' || propName === '')
+    if(value)
     {
-      return value;
-    }
-
-    for (const item of value)
-    {
-      if (item[propName] === filterString)
+      if (value.length === 0 || filterString === '' || propName === '')
       {
-        resultArray.push(item);
+        return value;
+      }
+
+      for (const item of value)
+      {
+        if (item[propName] === filterString)
+        {
+          resultArray.push(item);
+        }
       }
     }
-
     return resultArray;
   }
 }
