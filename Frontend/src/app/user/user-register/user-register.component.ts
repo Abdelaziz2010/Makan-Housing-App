@@ -1,10 +1,10 @@
 import { JsonpInterceptor } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { User } from 'src/app/model/user';
-import { UserServiceService } from 'src/app/services/user-service.service';
+import { UserForRegister } from 'src/app/model/user';
 import * as alertify from 'alertifyjs';
 import { AlertifyService } from 'src/app/services/alertify.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user-register',
@@ -15,12 +15,12 @@ export class UserRegisterComponent implements OnInit {
 
   registerationForm!: FormGroup;
 
-  user: any = {};
+  user!: UserForRegister;
 
-  userSumitted!: boolean;
+  userSubmitted!: boolean;
 
   constructor(private fb:FormBuilder,
-              private userService:UserServiceService,
+              private authService:AuthService,
               private alertify: AlertifyService){ }
 
   ngOnInit() {
@@ -81,21 +81,27 @@ export class UserRegisterComponent implements OnInit {
 
   onSubmit()
   {
-    this.user = Object.assign(this.user, this.registerationForm.value);
-    this.userSumitted = true;
+    console.log(this.registerationForm.value);
+    this.userSubmitted = true;
     if(this.registerationForm.valid)
     {
-      this.userSumitted = false;
-      localStorage.setItem('Users',JSON.stringify(this.user));
-      this.alertify.success('Congrats, you are successfully registered');
-    }
-    else
-    {
-      this.alertify.error('Kindly, provide the required fields!');
+      // this.userSubmitted = false;
+      // localStorage.setItem('Users',JSON.stringify(this.user));
+      // this.alertify.success('Congrats, you are successfully registered');
+      this.authService.registerUser(this.userData()).subscribe(() =>
+      {
+          this.onReset();
+          this.alertify.success('Congrats, you are successfully registered');
+      });
     }
   }
 
-  userData(): User{
+  onReset()
+  {
+    this.userSubmitted = false;
+    this.registerationForm.reset();
+  }
+  userData(): UserForRegister{
     return this.user = {
       userName: this.userName.value,
       email: this.email.value,

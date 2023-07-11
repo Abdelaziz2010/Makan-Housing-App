@@ -1,5 +1,6 @@
 ﻿using Backend.Dtos;
 using Backend.Errors;
+using Backend.Extensions;
 using Backend.Interfaces;
 using Backend.Models;
 using Microsoft.AspNetCore.Http;
@@ -50,7 +51,7 @@ namespace Backend.Controllers
         {
             ApiError apiError = new ApiError();
 
-            if (string.IsNullOrEmpty(loginReq.UserName) || string.IsNullOrEmpty(loginReq.Password))
+            if (loginReq.UserName.IsEmpty() || loginReq.Password.IsEmpty())
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User name or password can not be blank";
