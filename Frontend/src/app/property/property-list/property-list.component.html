@@ -6,8 +6,8 @@
 
 <label class="ms-4">Sort by: &nbsp;</label>
 <select [(ngModel)] = 'SortbyParam'>
-  <option value="City">City</option>
-  <option value="Price">Price</option>
+  <option value="city">City</option>
+  <option value="price">Price</option>
 </select>
 <button type="button" (click) = "onSortDirection()">
   <i *ngIf="SortDirection==='asc'" class="fas fa-sort-alpha-down"></i>
@@ -15,7 +15,7 @@
 </button>
 
 <div class="row mt-3">
-  <div *ngFor="let property of properties|filter:SearchCity:'City'|sort:[SortbyParam,SortDirection]" class="col-sm-4">
+  <div *ngFor="let property of properties|filter:SearchCity:'city'|sort:[SortbyParam,SortDirection]" class="col-sm-4">
     <div class="shadow-lg p-3 mb-3 bg-white rounded">
       <app-property-card [property]="property" ></app-property-card>
     </div>

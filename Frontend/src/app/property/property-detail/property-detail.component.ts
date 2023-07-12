@@ -22,7 +22,8 @@ export class PropertyDetailComponent implements OnInit {
               private router: Router,
               private housingService: HousingService) { }
 
-  ngOnInit() {
+  ngOnInit()
+  {
 
     this.propertyId = +this.route.snapshot.params['id'];
 
@@ -32,6 +33,8 @@ export class PropertyDetailComponent implements OnInit {
         this.property = data['prp'] as Property;
       }
     );
+
+    // this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn!.toDateString());
 
     this.galleryOptions =
     [
