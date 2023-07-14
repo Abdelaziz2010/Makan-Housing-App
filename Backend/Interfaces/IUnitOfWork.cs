@@ -2,9 +2,11 @@
 {
     public interface IUnitOfWork
     {
-        ICityRepository cityRepository { get; }
-        IUserRepository userRepository { get; }
-        IPropertyRepository propertyRepository { get; }
+        ICityRepository CityRepository { get; }
+        IUserRepository UserRepository { get; }
+        IPropertyRepository PropertyRepository { get; }
+        IPropertyTypeRepository PropertyTypeRepository { get; }
+        IFurnishingTypeRepository FurnishingTypeRepository { get; }
         Task<bool> SaveAsync();
     }
 }

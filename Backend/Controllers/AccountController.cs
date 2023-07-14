@@ -28,7 +28,7 @@ namespace Backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
-            var user = await uow.userRepository.Authenticate(loginReq.UserName, loginReq.Password);
+            var user = await uow.UserRepository.Authenticate(loginReq.UserName, loginReq.Password);
 
             ApiError apiError = new ApiError();
 
@@ -46,6 +46,7 @@ namespace Backend.Controllers
             return Ok(loginRes);
         }
 
+        // api/account/register
         [HttpPost("register")]
         public async Task<IActionResult> Register(LoginReqDto loginReq)
         {
@@ -58,14 +59,14 @@ namespace Backend.Controllers
                 return BadRequest(apiError);
             }
 
-            if (await uow.userRepository.UserAlreadyExists(loginReq.UserName))
+            if (await uow.UserRepository.UserAlreadyExists(loginReq.UserName))
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User already exists, please try different user name";
                 return BadRequest(apiError);
             }
 
-            uow.userRepository.Register(loginReq.UserName, loginReq.Password);
+            uow.UserRepository.Register(loginReq.UserName, loginReq.Password);
             await uow.SaveAsync();
             return StatusCode(201);
         }

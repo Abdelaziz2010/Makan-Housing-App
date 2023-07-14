@@ -26,6 +26,7 @@ import { PropertyDetailResolverService } from './property/property-detail/proper
 import { FilterPipe } from './Pipes/filter.pipe';
 import { SortPipe } from './Pipes/sort.pipe';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
+import { DatePipe } from '@angular/common';
 
 
 const appRoutes:Routes = [
@@ -72,6 +73,7 @@ const appRoutes:Routes = [
       useClass:HttpErrorInterceptorService,
       multi:true
     },
+    DatePipe,
     HousingService,
     AlertifyService,
     AuthService,

@@ -11,11 +11,15 @@ namespace Backend.Data
         {
             this.dc = dc;
         }
-        public ICityRepository cityRepository => new CityRepository(dc);
+        public ICityRepository CityRepository => new CityRepository(dc);
 
-        public IUserRepository userRepository => new UserRepository(dc);
+        public IUserRepository UserRepository => new UserRepository(dc);
 
-        public IPropertyRepository propertyRepository =>  new PropertyRepository(dc);
+        public IPropertyRepository PropertyRepository =>  new PropertyRepository(dc);
+
+        public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(dc);
+
+        public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
 
         public async Task<bool> SaveAsync()
         {

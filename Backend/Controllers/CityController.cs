@@ -22,7 +22,7 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCities()
         {
-            var cities = await uow.cityRepository.GetCitiesAsync();
+            var cities = await uow.CityRepository.GetCitiesAsync();
 
             var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
             
@@ -35,7 +35,7 @@ namespace Backend.Controllers
             var city = mapper.Map<City>(cityDto);
             city.LastUpdatedOn = DateTime.UtcNow;
             city.LastUpdatedBy = 1;
-            uow.cityRepository.AddCity(city);
+            uow.CityRepository.AddCity(city);
             await uow.SaveAsync();
             return StatusCode(201);
         }
@@ -46,7 +46,7 @@ namespace Backend.Controllers
             if (id != cityDto.Id)
                 return BadRequest("Update Not Allowed");
 
-            var cityfromdb = await uow.cityRepository.FindCity(id);
+            var cityfromdb = await uow.CityRepository.FindCity(id);
 
             if(cityfromdb == null)
                 return BadRequest("Update Not Allowed");
@@ -61,7 +61,7 @@ namespace Backend.Controllers
         [HttpPut("updateCityName/{id}")]
         public async Task<IActionResult> UpdateCity(int id, CityUpdateDto cityDto)
         {
-            var cityfromdb = await uow.cityRepository.FindCity(id);
+            var cityfromdb = await uow.CityRepository.FindCity(id);
             cityfromdb.LastUpdatedOn = DateTime.UtcNow;
             cityfromdb.LastUpdatedBy = 1;
             mapper.Map(cityDto, cityfromdb);
@@ -72,7 +72,7 @@ namespace Backend.Controllers
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateCityPatch(int id, JsonPatchDocument<City>cityToPatch)
         {
-            var cityfromdb = await uow.cityRepository.FindCity(id);
+            var cityfromdb = await uow.CityRepository.FindCity(id);
             cityfromdb.LastUpdatedOn = DateTime.UtcNow;
             cityfromdb.LastUpdatedBy = 1;
             cityToPatch.ApplyTo(cityfromdb,ModelState);
@@ -83,7 +83,7 @@ namespace Backend.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            uow.cityRepository.DeleteCity(id);
+            uow.CityRepository.DeleteCity(id);
             await uow.SaveAsync();
             return Ok(id);
         }

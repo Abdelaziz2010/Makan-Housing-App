@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Iproperty } from '../model/iproperty';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Ikeyvaluepair } from '../model/ikeyvaluepair';
 
 
 @Injectable({
@@ -23,86 +24,108 @@ export class HousingService
     return this.http.get<string[]>("http://localhost:5298/api/city");
   }
 
+
+  getPropertyTypes(): Observable<Ikeyvaluepair[]>
+  {
+    return this.http.get<Ikeyvaluepair[]>(this.baseUrl + '/propertytype/list');
+  }
+
+
+  getFurnishingTypes(): Observable<Ikeyvaluepair[]>
+  {
+      return this.http.get<Ikeyvaluepair[]>(this.baseUrl + '/furnishingtype/list');
+  }
+
+
   getProperty(id: number)
   {
-    return this.getAllProperties().pipe(
-      map(propertiesArray =>
-      {
-        // throw new Error('Some error');
-        return propertiesArray.find(p => p.id === id);
-      }));
+    return this.http.get<Property>(this.baseUrl +'/property/detail/'+id.toString());
   }
+
+
+  getAllProperties(SellRent: number): Observable<Property[]>
+  {
+    return this.http.get<Property[]>(this.baseUrl +'/property/list/'+SellRent.toString());
+  }
+
 
   // getProperty(id: number)
   // {
-  //   return this.http.get<Property>(this.baseUrl +'/property/detail/'+id.toString());
+  //   return this.getAllProperties().pipe(
+  //     map(propertiesArray =>
+  //     {
+  //       // throw new Error('Some error');
+  //       return propertiesArray.find(p => p.id === id);
+  //     }));
   // }
 
-  // getAllProperties(SellRent: number): Observable<Property[]>
+
+  // getAllProperties(SellRent?: number): Observable<Property[]>
   // {
-  //   return this.http.get<Property[]>(this.baseUrl +'/property/list/'+SellRent.toString());
+  //   return this.http.get('data/properties.json').pipe(
+  //     map(data =>
+  //     {
+  //       const propertiesArray: Array<Property> = [];
+  //       const localProperties = JSON.parse(localStorage.getItem('newProp')!);
+  //       if(localProperties)
+  //       {
+  //         for (const id in localProperties)
+  //         {
+  //           if(SellRent)
+  //           {
+  //             if (localProperties.hasOwnProperty(id) && localProperties[id].sellRent === SellRent)
+  //             {
+  //               propertiesArray.push(localProperties[id]);
+  //             }
+  //           }
+  //           else
+  //           {
+  //             propertiesArray.push(localProperties[id]);
+  //           }
+  //         }
+  //       }
+
+  //       const dataWithIndexSignature = data as { [key: string]: any} ;
+
+  //       for (const id in dataWithIndexSignature)
+  //       {
+  //         if(SellRent)
+  //         {
+  //           if(dataWithIndexSignature.hasOwnProperty(id) && dataWithIndexSignature[id].sellRent === SellRent)
+  //           {
+  //             propertiesArray.push(dataWithIndexSignature[id]);
+  //           }
+  //         }
+  //         else
+  //         {
+  //           propertiesArray.push(dataWithIndexSignature[id]);
+  //         }
+  //       }
+  //       return propertiesArray;
+  //     })
+  //   );
+  //   return this.http.get<Property[]>('data/properties.json');
   // }
 
-
-
-  getAllProperties(SellRent?: number): Observable<Property[]>
-  {
-    return this.http.get('data/properties.json').pipe(
-      map(data =>
-      {
-        const propertiesArray: Array<Property> = [];
-        const localProperties = JSON.parse(localStorage.getItem('newProp')!);
-        if(localProperties)
-        {
-          for (const id in localProperties)
-          {
-            if(SellRent)
-            {
-              if (localProperties.hasOwnProperty(id) && localProperties[id].sellRent === SellRent)
-              {
-                propertiesArray.push(localProperties[id]);
-              }
-            }
-            else
-            {
-              propertiesArray.push(localProperties[id]);
-            }
-          }
-        }
-
-        const dataWithIndexSignature = data as { [key: string]: any} ;
-
-        for (const id in dataWithIndexSignature)
-        {
-          if(SellRent)
-          {
-            if(dataWithIndexSignature.hasOwnProperty(id) && dataWithIndexSignature[id].sellRent === SellRent)
-            {
-              propertiesArray.push(dataWithIndexSignature[id]);
-            }
-          }
-          else
-          {
-            propertiesArray.push(dataWithIndexSignature[id]);
-          }
-        }
-        return propertiesArray;
-      })
-    );
-    return this.http.get<Property[]>('data/properties.json');
-  }
 
   addProperty(property: Property)
   {
-    let newProp = [property];
-
-    // Add new property in array if newProp alreay exists in local storage
-    if (localStorage.getItem('newProp'))
-    {
-      newProp = [property, ...JSON.parse(localStorage.getItem('newProp')!)];
-    }
-    localStorage.setItem('newProp', JSON.stringify(newProp));
+    return this.http.post(this.baseUrl +'/property/add',property);
   }
+
+  // add property in local storage
+  // addProperty(property: Property)
+  // {
+  //   let newProp = [property];
+
+  //   // Add new property in array if newProp alreay exists in local storage
+  //   if (localStorage.getItem('newProp'))
+  //   {
+  //     newProp = [property, ...JSON.parse(localStorage.getItem('newProp')!)];
+  //   }
+  //   localStorage.setItem('newProp', JSON.stringify(newProp));
+  // }
+
 
   newPropID()
   {
@@ -117,6 +140,8 @@ export class HousingService
       return 101;
     }
   }
+
+
   getPropertyAge(dateofEstablishment: string): string
   {
       const today = new Date();
