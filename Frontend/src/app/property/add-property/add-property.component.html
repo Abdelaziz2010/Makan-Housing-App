@@ -230,9 +230,10 @@
                   </div>
                 </div>
 
-                <div class="form-group col-3 mt-3">
+                <div class="form-group col-6 mt-3">
                   <label *ngIf="propertyView.readyToMove">Establishment Date</label>
                   <label *ngIf="!propertyView.readyToMove">Possession Date</label>
+
                   <input type="text"
                   class="form-control" formControlName="PossessionOn"
                   #possessionOn

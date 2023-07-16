@@ -12,9 +12,7 @@ using System.Text;
 
 namespace Backend.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     {
         private readonly IUnitOfWork uow;
         private readonly IConfiguration configuration;

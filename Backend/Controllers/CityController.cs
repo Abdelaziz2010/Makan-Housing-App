@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CityController : ControllerBase
+    public class CityController : BaseController
     {
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;

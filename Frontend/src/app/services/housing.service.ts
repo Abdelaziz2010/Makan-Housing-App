@@ -1,5 +1,5 @@
 import { Injectable, LOCALE_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Property } from '../model/property';
 import { Ipropertybase } from '../model/ipropertybase';
 import { Observable } from 'rxjs';
@@ -110,7 +110,12 @@ export class HousingService
 
   addProperty(property: Property)
   {
-    return this.http.post(this.baseUrl +'/property/add',property);
+    const httpOptions = {
+      headers : new HttpHeaders({
+        Authorization: 'Bearer '+localStorage.getItem('token')
+      })
+    };
+    return this.http.post(this.baseUrl +'/property/add',property,httpOptions);
   }
 
   // add property in local storage
