@@ -2,6 +2,7 @@ using Backend.Data;
 using Backend.Extensions;
 using Backend.Helpers;
 using Backend.Interfaces;
+using Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,6 @@ namespace Backend
             // Add services to the container.
 
             builder.Services.AddControllers().AddNewtonsoftJson();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors();
@@ -28,6 +28,7 @@ namespace Backend
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddScoped<IPhotoService, PhotoService>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             var secretKey = builder.Configuration.GetSection("AppSettings:Key").Value;
