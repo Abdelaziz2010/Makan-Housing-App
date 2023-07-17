@@ -2,8 +2,8 @@
 
   <div class="col-3 mb-2" *ngFor="let photo of property.photos">
       <img src="{{photo.imageUrl}}" alt="{{photo.imageUrl}}" class="img-thumbnail p-1">
-      <div class="text-center">
-          <button class="btn btn-sm" [disabled]="photo.isPrimary"
+      <div class="text-center mt-1">
+          <button class="btn btn-sm me-1" [disabled]="photo.isPrimary"
               [ngClass]='photo.isPrimary ? "btn-success active" : "btn-outline-success"'
               (click)="setPrimaryPhoto(property.id, photo)">Main</button>
 
