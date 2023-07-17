@@ -4,7 +4,7 @@ import { Property } from 'src/app/model/property';
 import { AlertifyService } from 'src/app/services/alertify.service';
 import { HousingService } from 'src/app/services/housing.service';
 import { environment } from 'src/environments/environment';
-// import { FileUploader } from 'ng2-file-upload';
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-photo-editor',
@@ -17,67 +17,77 @@ export class PhotoEditorComponent implements OnInit
   @Input() property!: Property;
   @Output() mainPhotoChangedEvent = new EventEmitter<string>();
 
-  ngOnInit() {
-  }
 
-
-  // uploader: FileUploader;
+  uploader!: FileUploader;
   hasBaseDropZoneOver!: boolean;
   baseUrl = environment.baseUrl;
-  maxAllowedFileSize=1*1024*1024;
+  maxAllowedFileSize=10*1024*1024;
 
-  // response: string;
+   response!: string;
 
   constructor(private housingService: HousingService, private alertify: AlertifyService) { }
 
-  // public fileOverBase(e: any): void {
-  //     this.hasBaseDropZoneOver = e;
-  // }
+  public fileOverBase(e: any): void
+  {
+      this.hasBaseDropZoneOver = e;
+  }
 
-  // initializeFileUploader() {
-  //     this.uploader = new FileUploader({
-  //         url: this.baseUrl +'/property/add/photo/'+ String(this.property.id),
-  //         authToken: 'Bearer '+ localStorage.getItem('token'),
-  //         isHTML5: true,
-  //         allowedFileType: ['image'],
-  //         removeAfterUpload: true,
-  //         autoUpload: true,
-  //         maxFileSize:this.maxAllowedFileSize
-  //     });
 
-  //     this.uploader.onAfterAddingFile = (file) => {
-  //         file.withCredentials = false;
-  //     };
+  initializeFileUploader()
+  {
+      this.uploader = new FileUploader({
+          url: this.baseUrl +'/property/add/photo/'+ String(this.property.id),
+          authToken: 'Bearer '+ localStorage.getItem('token'),
+          isHTML5: true,
+          allowedFileType: ['image'],
+          removeAfterUpload: true,
+          autoUpload: true,
+          maxFileSize: this.maxAllowedFileSize
+      });
 
-  //     this.uploader.onSuccessItem = (item, response, status, headers) => {
-  //         if (response) {
-  //             const photo = JSON.parse(response);
-  //             this.property.photos.push(photo);
-  //         }
-  //     };
+      this.uploader.onAfterAddingFile = (file) =>
+      {
+          file.withCredentials = false;
+      };
 
-  //     this.uploader.onErrorItem = (item, response, status, headers) => {
-  //         let errorMessage = 'Some unknown error occured';
-  //         if (status===401) {
-  //             errorMessage ='Your session has expired, login again';
-  //         }
+      this.uploader.onSuccessItem = (item, response, status, headers) =>
+      {
+          if (response)
+          {
+              const photo = JSON.parse(response);
+              this.property.photos!.push(photo);
+          }
+      };
 
-  //         if (response) {
-  //             errorMessage = response;
-  //         }
+      this.uploader.onErrorItem = (item, response, status, headers) =>
+      {
+          let errorMessage = 'Some unknown error occured';
+          if (status===401)
+          {
+              errorMessage ='Your session has expired, login again';
+          }
 
-  //         this.alertify.error(errorMessage);
-  //     };
-  // }
+          if (response)
+          {
+              errorMessage = response;
+          }
+
+          this.alertify.error(errorMessage);
+      };
+
+  }
 
   mainPhotoChanged(url: string)
   {
       this.mainPhotoChangedEvent.emit(url);
   }
 
-  // ngOnInit(): void {
-  //     this.initializeFileUploader();
-  // }
+
+  ngOnInit(): void
+  {
+      this.initializeFileUploader();
+  }
+
 
   setPrimaryPhoto(propertyId: number, photo: Photo)
   {
@@ -106,6 +116,5 @@ export class PhotoEditorComponent implements OnInit
           this.property.photos = this.property.photos!.filter(p => p.publicId !== photo.publicId);
       });
   }
-
 
 }

@@ -80,9 +80,10 @@ namespace Backend.Controllers
 
             property.Photos.Add(photo);
 
-            await uow.SaveAsync();
+            if (await uow.SaveAsync()) 
+                return mapper.Map<PhotoDto>(photo);
 
-            return StatusCode(201);
+            return BadRequest("Some problem occured in uploading photo..");
 
         }
 
