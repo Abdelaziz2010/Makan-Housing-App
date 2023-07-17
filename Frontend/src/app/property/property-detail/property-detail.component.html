@@ -46,6 +46,7 @@
   <div class="col-sm-8 p-sm-2">
     <div class="tab-panel p-sm-3">
       <tabset type="pills" class="member-tabset">
+
         <tab heading="Overview">
           <h1>Overview</h1>
           <div class="row">
@@ -100,6 +101,7 @@
               </div>
             </div>
         </tab>
+
         <tab heading="Address">
           <div class="col-sm-12">
             <h1>Address</h1>
@@ -108,12 +110,17 @@
                 <strong>{{property.address2}}</strong><br/>
                 <strong>{{property.city}}</strong>
             </div>
-        </div>
-
+          </div>
         </tab>
+
         <tab heading="Photos">
           <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery"></ngx-gallery>
         </tab>
+
+        <tab heading="Upload/Edit Photos">
+            <app-photo-editor [property]="property" (mainPhotoChangedEvent)="changePrimaryPhoto($event)"></app-photo-editor>
+        </tab>
+
         <tab heading="Contact">
           <h1>Contact Detail</h1>
           This should be restricted area and only registered user should be able to see seller contact details

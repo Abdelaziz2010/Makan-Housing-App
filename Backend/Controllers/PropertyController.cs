@@ -95,12 +95,11 @@ namespace Backend.Controllers
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
+            if (property.PostedBy != userId)
+                return BadRequest("You are not authorized to change the photo");
+
             if (property == null || property.PostedBy != userId)
                 return BadRequest("No such property or photo exists");
-
-            if (property.PostedBy != userId)
-                return BadRequest("You are not authorised to change the photo");
-
 
             var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
 
@@ -134,7 +133,7 @@ namespace Backend.Controllers
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
             if (property.PostedBy != userId)
-                return BadRequest("You are not authorised to delete the photo");
+                return BadRequest("You are not authorized to delete the photo");
 
             if (property == null || property.PostedBy != userId)
                 return BadRequest("No such property or photo exists");
