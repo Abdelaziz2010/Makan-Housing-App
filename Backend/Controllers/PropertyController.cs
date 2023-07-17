@@ -123,40 +123,45 @@ namespace Backend.Controllers
             return BadRequest("Failed to set primary photo");
         }
 
-        //[HttpDelete("delete-photo/{propId}/{photoPublicId}")]
-        //[Authorize]
-        //public async Task<IActionResult> DeletePhoto(int propId, string photoPublicId)
-        //{
-        //    var userId = GetUserId();
 
-        //    var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+        //property/deletephoto/42/jl0sdfl20sdf2s
+        [HttpDelete("delete-photo/{propId}/{photoPublicId}")]
+        [Authorize]
+        public async Task<IActionResult> DeletePhoto(int propId, string photoPublicId)
+        {
+            var userId = GetUserId();
 
-        //    if (property.PostedBy != userId)
-        //        return BadRequest("You are not authorised to delete the photo");
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
-        //    if (property == null || property.PostedBy != userId)
-        //        return BadRequest("No such property or photo exists");
+            if (property.PostedBy != userId)
+                return BadRequest("You are not authorised to delete the photo");
 
-        //    var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
+            if (property == null || property.PostedBy != userId)
+                return BadRequest("No such property or photo exists");
 
-        //    if (photo == null)
-        //        return BadRequest("No such property or photo exists");
+            var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
 
-        //    if (photo.IsPrimary)
-        //        return BadRequest("You can not delete primary photo");
+            if (photo == null)
+                return BadRequest("No such property or photo exists");
 
-        //    if (photo.PublicId != null)
-        //    {
-        //        var result = await photoService.DeletePhotoAsync(photo.PublicId);
-        //        if (result.Error != null) return BadRequest(result.Error.Message);
-        //    }
+            if (photo.IsPrimary)
+                return BadRequest("You can not delete primary photo");
 
-        //    property.Photos.Remove(photo);
+            if (photo.PublicId != null)
+            {
+                var result = await photoService.DeletePhotoAsync(photo.PublicId);
 
-        //    if (await uow.SaveAsync()) return Ok();
+                if (result.Error != null) 
+                    return BadRequest(result.Error.Message);
+            }
 
-        //    return BadRequest("Failed to delete photo");
-        //}
+            property.Photos.Remove(photo);
+
+            if (await uow.SaveAsync()) 
+                return Ok();
+
+            return BadRequest("Failed to delete photo");
+        }
     }
 }
 
