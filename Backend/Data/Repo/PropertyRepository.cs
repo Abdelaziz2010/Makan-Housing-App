@@ -18,7 +18,7 @@ namespace Backend.Data.Repo
                 .Include(p => p.PropertyType)
                 .Include(p => p.FurnishingType)
                 .Include(p => p.City)
-                .Include(p => p.User)
+                .Include(p => p.Photos)
                 .Where(p => p.SellRent == sellRent)
                 .ToListAsync();
             return properties;
@@ -42,7 +42,7 @@ namespace Backend.Data.Repo
             .Include(p => p.FurnishingType)
             .Include(p => p.Photos)
             .Where(p => p.Id == id)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
 
             return property;
         }
