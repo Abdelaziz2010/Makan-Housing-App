@@ -54,7 +54,7 @@ Makan is a property listing platform designed to simplify your search for homes 
 - **Detailed Property Information** (photos, features, amenities)
 - **User Account Management** (registration, login, JWT authentication)
 - **Contact Forms** for property inquiries
-
+- **Cloud Storage** uses Cloudinary for uploading, storing images.
 
 ### ⚡ Performance & Security
 - **JWT Authentication** for secure API access
