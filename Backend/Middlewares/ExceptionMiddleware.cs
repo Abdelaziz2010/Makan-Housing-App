@@ -1,4 +1,5 @@
 ﻿using Backend.Errors;
+using Serilog;
 using System.Net;
 
 namespace Backend.Middlewares
@@ -9,8 +10,7 @@ namespace Backend.Middlewares
         private readonly ILogger<ExceptionMiddleware> logger;
         private readonly IHostEnvironment env;
 
-        public ExceptionMiddleware(RequestDelegate next,ILogger<ExceptionMiddleware> logger,
-        IHostEnvironment env)
+        public ExceptionMiddleware(RequestDelegate next,ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
         {
             this.env = env;
             this.next = next;
@@ -50,7 +50,8 @@ namespace Backend.Middlewares
                     response = new ApiError((int)statusCode, message);
                 }
 
-                logger.LogError(ex, ex.Message);
+                // Logging the exception
+                Log.Error(ex, "Unhandled Exception occurred while processing request to {Path}", context.Request.Path);
                 context.Response.StatusCode = (int)statusCode;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(response.ToString());

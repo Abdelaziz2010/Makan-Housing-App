@@ -2,11 +2,13 @@ using Backend.Data;
 using Backend.Extensions;
 using Backend.Helpers;
 using Backend.Interfaces;
+using Backend.Middlewares;
 using Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace Backend
@@ -18,6 +20,15 @@ namespace Backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            // Configure Serilog, used to log during startup (before the app is built)
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration) // Reads from appsettings.json
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
+
+            Log.Information("Starting the Makan API.....");
 
             builder.Services.AddControllers().AddNewtonsoftJson();
             builder.Services.AddEndpointsApiExplorer();
@@ -57,6 +68,8 @@ namespace Backend
                 app.UseSwaggerUI();
             }
             //app.ConfigureExceptionHandler(app.Environment);
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>(); 
 
             app.UseRouting();
 
