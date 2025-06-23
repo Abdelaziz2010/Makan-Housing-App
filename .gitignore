@@ -9,3 +9,5 @@ wwwroot
 *.cache
 node_modules
 .vs/
+[Ll]og/
+[Ll]ogs/
