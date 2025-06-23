@@ -42,6 +42,9 @@ namespace Backend
             builder.Services.AddScoped<IPhotoService, PhotoService>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
+            // Add MemoryCache to DI
+            builder.Services.AddMemoryCache();
+
             var secretKey = builder.Configuration.GetSection("AppSettings:Key").Value;
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
@@ -68,6 +71,9 @@ namespace Backend
                 app.UseSwaggerUI();
             }
             //app.ConfigureExceptionHandler(app.Environment);
+
+            // Use Rate Limiter globally
+            app.UseMiddleware<RateLimitingMiddleware>();
 
             app.UseMiddleware<RequestResponseLoggingMiddleware>(); 
 
